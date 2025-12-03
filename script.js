@@ -18,14 +18,7 @@ let c_ready = "green";
 let c_normal = "white";
 let c_bg = "#222"
 
-let theme = null;
-
-fetch("./settings/config.json")
-    .then(r => r.json())
-    .then(config => {
-        theme = config.theme;
-        changeTheme("default");
-    });
+let theme_list = null;
 
 function updateTimer() {
     const now = performance.now();
@@ -57,6 +50,14 @@ document.addEventListener("keydown", (e) => {
             nextScramble();
         }
 
+        if (e.code == "KeyH") {
+            notice_block.textContent = "T: Theme; G: Goal; 0: Exit";
+        }
+
+        if (e.code == "Digit0") {
+            notice_block.textContent = "";
+        }
+
         if (e.code == "KeyT") {
             notice_block.textContent = "Select Theme: P - Pink, D - Dark, B - Blue";
         }
@@ -73,6 +74,15 @@ document.addEventListener("keydown", (e) => {
             } else {
                 notice_block.textContent = "";
             }
+        }
+
+        if (e.code == "KeyG") {
+            const input = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
+            if (input && input > 0 && !isNaN(Number(input))) {
+                goal = Number(input);
+                changeStorage("goal", goal);
+            }
+
         }
         lastKey = e.code;
     }
@@ -223,8 +233,41 @@ function printResults(avg) {
 }
 
 function changeTheme(t) {
-    c_ready = theme[t]["ready"];
-    c_normal = theme[t]["normal"];
-    c_bg = theme[t]["background"];
+    c_ready = theme_list[t]["ready"];
+    c_normal = theme_list[t]["normal"];
+    c_bg = theme_list[t]["background"];
     resetTheme();
+    changeStorage("theme", t);
+    // console.log(`Theme changed to ${t}`);
 }
+
+function changeStorage(setting, value) {
+    localStorage.setItem(setting, value);
+}
+
+function getVariable(setting) {
+    return localStorage.getItem(setting);
+}
+
+function getObject(obj) {
+    return JSON.parse(localStorage.getItem(obj));
+}
+
+async function loadConfig() {
+    const response = await fetch("./settings/config.json");
+    const config = await response.json();
+    theme_list = config.theme;
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+    await loadConfig();
+
+    const theme = getVariable("theme");
+    if (theme) {
+        changeTheme(theme);
+    }
+    const g = getVariable("goal");
+    if (g) {
+        goal = Number(g);
+    }
+});
