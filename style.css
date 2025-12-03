@@ -1,0 +1,52 @@
+body {
+    background: #222;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    height: 90vh;
+    user-select: none;
+    overflow: hidden;
+    height: 100%;
+}
+
+#timer {
+    font-size: 6.4rem;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#scramble {
+    font-size: 2rem;
+    position: absolute;
+    width: 80vw;
+    text-align: center;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+#results {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+#results th,
+#results td {
+    min-width: 3rem;
+    text-align: center;
+    padding: 0 0.5rem;
+}
+
+#average {
+    font-size: 2rem;
+}
+
+#notice {
+    text-align: center;
+    padding: 10px 0;
+}

@@ -1,0 +1,19 @@
+{
+    "theme": {
+        "default": {
+            "background": "#222",
+            "normal": "white",
+            "ready": "lightgreen"
+        },
+        "pink": {
+            "background": "#FFCDC9",
+            "normal": "brown",
+            "ready": "lightgreen"
+        },
+        "blue": {
+            "background": "#BBDCE5",
+            "normal": "#0d3046",
+            "ready": "darkgreen"
+        }
+    }
+}
