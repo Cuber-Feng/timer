@@ -22,10 +22,38 @@ let c_bg = "#222"
 
 let theme_list = null;
 
+class Result {
+    constructor(T) {
+        this.t = Number(T);
+        this.miniute = (this.t / 60) | 0;
+        this.second = this.t % 60;
+        this.isDNF = false;
+        this.isPlusTwo = false;
+    }
+    displayTime() {
+        if (this.isDNF) {
+            return "DNF";
+        } else if (this.miniute == 0) {
+            return this.t.toFixed(2);
+        } else {
+            return `${this.miniute}:${this.second.toFixed(2).padStart(5, '0')}`;
+        }
+    }
+    changeTime(T) {
+        this.t = Number(T);
+        this.miniute = (this.t / 60) | 0;
+        this.second = this.t % 60;
+    }
+
+}
+
+let c_r = new Result(0);
+
 function updateTimer() {
     const now = performance.now();
     const elapsed = (now - startTime) / 1000;
-    timer_block.textContent = elapsed.toFixed(2);
+    c_r.changeTime(elapsed);
+    timer_block.textContent = c_r.displayTime();
 }
 
 let lastKey = null;
@@ -128,7 +156,7 @@ function stopTimer() {
     scramble_block.textContent = genScramble();
     r = Number(timer_block.textContent);
     current_result = r;
-    addResult(r);
+    addResult(c_r);
     locked = true;
     setTimeout(() => {
         locked = false;
@@ -156,7 +184,7 @@ function showElements() {
     table_block.style.display = "block";
 }
 
-function addResult(t) {
+function addResult() {
     let n;
     if (mode == "ao5")
         n = 5;
@@ -164,10 +192,10 @@ function addResult(t) {
         n = 3;
 
     if (results.length < n) {
-        results.push(t);
+        results.push(c_r.t);
         // sorted_result = results.slice().sort((a, b) => a - b);
         sorted_result = mysort(results);
-        document.getElementById("att" + String(results.length)).textContent = t.toFixed(2);
+        document.getElementById("att" + String(results.length)).textContent = c_r.displayTime();
         document.getElementById("target").textContent = getTarget();
         // document.getElementById("bpa").textContent = getBPA();
         // document.getElementById("wpa").textContent = getWPA();
@@ -197,8 +225,8 @@ function addResult(t) {
         for (i = 1; i <= n; i++) {
             document.getElementById("att" + String(i)).textContent = "";
         }
-        results.push(t);
-        document.getElementById("att" + String(results.length)).textContent = t.toFixed(2);
+        results.push(c_r);
+        document.getElementById("att" + String(results.length)).textContent = c_r.toFixed(2);
     }
 }
 
