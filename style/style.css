@@ -42,11 +42,84 @@ body {
     padding: 0 0.5rem;
 }
 
-#average, #best {
+#average,
+#best {
     font-size: 2rem;
 }
 
 #notice {
     text-align: center;
     padding: 10px 0;
+}
+
+@media (max-width: 600px) {
+    #timer {
+        font-size: 4rem;
+        top: 43%;
+    }
+
+    #scramble {
+        font-size: 1.3rem;
+        width: 90vw;
+        top: 2rem;
+    }
+
+    #results {
+        position: absolute;
+        bottom: 1rem;
+        left: 2rem;
+        transform: translate(0, 0);
+    }
+
+    table,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    tr {
+        margin-bottom: 1em;
+    }
+
+    #results th,
+    #results td {
+        min-width: 3rem;
+        text-align: left;
+        padding: 0 0.5rem;
+    }
+
+    td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    th {
+        display: none;
+    }
+
+    td::before {
+        content: attr(data-label);
+        /* 用 data-label 显示列名 */
+    }
+
+    #average,
+    #best,
+    #target {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    /* 
+    #target::before {
+        content: "-----";
+        display: block;
+    } 
+*/
+    #target::before {
+        content: "-------------\ATarget:";
+        white-space: pre;
+    }
+
 }

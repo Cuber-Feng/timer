@@ -123,6 +123,31 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
+document.addEventListener("touchstart", (e) => {
+    if (running) {
+        stopTimer();
+    } else {
+        if (locked) {
+            return;
+        } else if (!running) {
+            timer_block.style.color = c_ready;
+            isReady = true;
+            hideElements();
+        }
+
+    }
+});
+
+document.addEventListener("touchend", (e) => {
+    if (!running && isReady) {
+        startTimer();
+    }
+});
+
+document.addEventListener("touchmove", (e) => {
+    console.log("触摸移动", e.touches);
+});
+
 scramble_block.textContent = scramble;
 
 function stopTimer() {
@@ -208,7 +233,7 @@ function changeMode(m) {
         document.getElementById("att4").style.display = "none";
         document.getElementById("att5").style.display = "none";
 
-    } else if (m == "ao5") {
+    } else if (m == "ao5" && !isMobile()) {
         current_round = new Round(5, goal);
         document.getElementById("col4").style.display = "table-cell";
         document.getElementById("col5").style.display = "table-cell";
@@ -256,3 +281,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         changeMode(m);
     }
 });
+
+function isMobile() {
+    return window.innerWidth <= 768; // 768px 以下通常认为是手机/平板
+}
