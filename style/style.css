@@ -42,7 +42,7 @@ body {
     padding: 0 0.5rem;
 }
 
-#average {
+#average, #best {
     font-size: 2rem;
 }
 

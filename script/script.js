@@ -8,7 +8,7 @@ let sorted_result = [];
 let locked = false;
 let goal = 10;
 let mode = "ao5"; // or "mo3"
-let current_result = -1
+// let current_result = -1
 
 let timer_block = document.getElementById("timer");
 let scramble_block = document.getElementById("scramble");
@@ -22,38 +22,14 @@ let c_bg = "#222"
 
 let theme_list = null;
 
-class Result {
-    constructor(T) {
-        this.t = Number(T);
-        this.miniute = (this.t / 60) | 0;
-        this.second = this.t % 60;
-        this.isDNF = false;
-        this.isPlusTwo = false;
-    }
-    displayTime() {
-        if (this.isDNF) {
-            return "DNF";
-        } else if (this.miniute == 0) {
-            return this.t.toFixed(2);
-        } else {
-            return `${this.miniute}:${this.second.toFixed(2).padStart(5, '0')}`;
-        }
-    }
-    changeTime(T) {
-        this.t = Number(T);
-        this.miniute = (this.t / 60) | 0;
-        this.second = this.t % 60;
-    }
-
-}
-
-let c_r = new Result(0);
+let current_result = new Result(0);
+let current_round = new Round(5, goal);
 
 function updateTimer() {
     const now = performance.now();
     const elapsed = (now - startTime) / 1000;
-    c_r.changeTime(elapsed);
-    timer_block.textContent = c_r.displayTime();
+    current_result.changeTime(elapsed);
+    timer_block.textContent = current_result.displayTime();
 }
 
 let lastKey = null;
@@ -74,7 +50,8 @@ document.addEventListener("keydown", (e) => {
             }
         }
         if (e.code == "KeyR") {
-            reset();
+            current_round.reset();
+            timer_block.textContent = "0.00";
         }
         if (lastKey != "KeyT" && e.code == "KeyD") {
             switchDNF();
@@ -154,9 +131,7 @@ function stopTimer() {
     isReady = false;
     showElements();
     scramble_block.textContent = genScramble();
-    r = Number(timer_block.textContent);
-    current_result = r;
-    addResult(c_r);
+    current_round.addResult(current_result);
     locked = true;
     setTimeout(() => {
         locked = false;
@@ -184,166 +159,16 @@ function showElements() {
     table_block.style.display = "block";
 }
 
-function addResult() {
-    let n;
-    if (mode == "ao5")
-        n = 5;
-    else if (mode == "mo3")
-        n = 3;
-
-    if (results.length < n) {
-        results.push(c_r.t);
-        // sorted_result = results.slice().sort((a, b) => a - b);
-        sorted_result = mysort(results);
-        document.getElementById("att" + String(results.length)).textContent = c_r.displayTime();
-        document.getElementById("target").textContent = getTarget();
-        // document.getElementById("bpa").textContent = getBPA();
-        // document.getElementById("wpa").textContent = getWPA();
-        document.getElementById("average").textContent = getAverage(mode);
-
-        // add ( ) to results (max and min)
-        if (results.length == n && mode == "ao5") {
-            maxR = sorted_result[n - 1];
-            minR = sorted_result[0];
-            let flagMax = false;
-            let flagMin = false;
-            for (let i = 1; i <= 5; i++) {
-                if (!flagMax && document.getElementById("att" + String(i)).textContent == maxR) {
-                    document.getElementById("att" + String(i)).textContent =
-                        `(${document.getElementById("att" + String(i)).textContent})`;
-                    flagMax = true;
-                } else if (!flagMin && document.getElementById("att" + String(i)).textContent == minR) {
-                    document.getElementById("att" + String(i)).textContent =
-                        `(${document.getElementById("att" + String(i)).textContent})`;
-                    flagMin = true;
-                }
-            }
-        }
-    } else {
-        results = [];
-        document.getElementById("average").textContent = "";
-        for (i = 1; i <= n; i++) {
-            document.getElementById("att" + String(i)).textContent = "";
-        }
-        results.push(c_r);
-        document.getElementById("att" + String(results.length)).textContent = c_r.toFixed(2);
-    }
-}
-
-function getBPA() {
-    if (results.length < 4 || results.length == 5) {
-        return ""
-    } else if (results.length == 4) {
-        if (sorted_result[3] == "DNF" && sorted_result[2] == "DNF") {
-            return "DNF";
-        }
-        return ((sorted_result[0] + sorted_result[1] + sorted_result[2]) / 3).toFixed(2);
-    }
-}
-
-function getWPA() {
-    if (results.length < 4 || results.length == 5) {
-        return ""
-    } else if (results.length == 4) {
-        if (sorted_result[3] == "DNF" && sorted_result[2] == "DNF") {
-            return "DNF";
-        }
-        return ((sorted_result[3] + sorted_result[1] + sorted_result[2]) / 3).toFixed(2);
-    }
-}
-
-function getTarget() {
-    if (mode == "mo3") {
-        return "";
-    }
-    if (results.length < 4 || results.length == 5) {
-        return ""
-    } else {
-        if (Number(getWPA()) <= goal) {
-            return "Guaranteed!";
-        } else if (getBPA() == "DNF" || Number(getBPA()) > goal) {
-            return "Impossible!";
-        } else {
-            return (goal * 3 - sorted_result[1] - sorted_result[2]).toFixed(2);
-        }
-    }
-}
-
-function getAverage(mode = "ao5") {
-    if (mode == "ao5") {
-        if (results.length < 5) {
-            return "";
-        }
-        let count_dnf = 0;
-        let r = [];
-        for (let i of results) {
-            if (i === "DNF") {
-                count_dnf++;
-            } else {
-                r.push(i);
-            }
-        }
-        r.sort((a, b) => a - b);
-        let avg = 0;
-        if (count_dnf > 1) {
-            return "DNF";
-        } else if (count_dnf == 1) {
-            avg = ((sorted_result[3] + sorted_result[1] + sorted_result[2]) / 3).toFixed(2);
-        }
-        avg = ((sorted_result[3] + sorted_result[1] + sorted_result[2]) / 3).toFixed(2);
-        // printResults(avg);
-        return avg;
-    } else if (mode == "mo3") {
-        if (results.length < 3) {
-            return "";
-        }
-        for (let i of results) {
-            if (i === "DNF") {
-                return "DNF";
-            }
-        }
-        return ((results[0] + results[1] + results[2]) / 3).toFixed(2);
-    }
-}
-
-function mysort(r) {
-    let count_dnf = 0;
-    let list = [];
-    for (let i of r) {
-        if (i == "DNF") {
-            count_dnf++;
-        } else {
-            list.push(i);
-        }
-    }
-    list.sort((a, b) => a - b);
-    for (let a = 0; a < count_dnf; a++) {
-        list.push("DNF");
-    }
-    return list;
-}
-
-function reset() {
-    timer_block.textContent = "0.00";
-    results = [];
-    for (i = 1; i <= 5; i++) {
-        clearTextContent(document.getElementById("att" + String(i)));
-    }
-    clearTextContent(document.getElementById("bpa"));
-    clearTextContent(document.getElementById("wpa"));
-    clearTextContent(document.getElementById("average"));
-}
-
 function switchDNF() {
-    const index = results.length - 1;
+    const index = this.round.length - 1;
     if (timer_block.textContent != "DNF") {
         timer_block.textContent = "DNF";
-        results[index] = "DNF";
+        this.round[index] = "DNF";
         document.getElementById("att" + String(index + 1)).textContent = "DNF";
     } else {
         timer_block.textContent = current_result.toFixed(2);
         document.getElementById("att" + String(index + 1)).textContent = current_result.toFixed(2);
-        results[index] = current_result;
+        this.round[index] = current_result;
     }
 }
 
@@ -359,7 +184,7 @@ function resetTheme() {
 }
 
 function printResults(avg) {
-    console.log(`${results[0].toFixed(2)}\t${results[1].toFixed(2)}\t${results[2].toFixed(2)}\t${results[3].toFixed(2)}\t${results[4].toFixed(2)}\nao5: ${avg}`);
+    console.log(`${this.round[0].toFixed(2)}\t${this.round[1].toFixed(2)}\t${this.round[2].toFixed(2)}\t${this.round[3].toFixed(2)}\t${this.round[4].toFixed(2)}\nao5: ${avg}`);
 }
 
 function changeTheme(t) {
@@ -372,9 +197,10 @@ function changeTheme(t) {
 }
 
 function changeMode(m) {
-    reset();
+    current_round.reset();
     mode = m;
     if (m == "mo3") {
+        current_round = new Round(3, goal);
         document.getElementById("col4").style.display = "none";
         document.getElementById("col5").style.display = "none";
         document.getElementById("target_title").style.display = "none";
@@ -383,6 +209,7 @@ function changeMode(m) {
         document.getElementById("att5").style.display = "none";
 
     } else if (m == "ao5") {
+        current_round = new Round(5, goal);
         document.getElementById("col4").style.display = "table-cell";
         document.getElementById("col5").style.display = "table-cell";
         document.getElementById("target_title").style.display = "table-cell";
