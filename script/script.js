@@ -48,7 +48,7 @@ document.addEventListener("keydown", (e) => {
         if (e.code == "KeyR") {
             reset();
         }
-        if (e.code == "KeyD") {
+        if (lastKey != "KeyT" && e.code == "KeyD") {
             switchDNF();
         }
         if (e.code == "ArrowRight") {
