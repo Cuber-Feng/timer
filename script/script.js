@@ -14,6 +14,7 @@ let timer_block = document.getElementById("timer");
 let scramble_block = document.getElementById("scramble");
 let table_block = document.getElementById("results");
 let notice_block = document.getElementById("notice");
+let m_notice_block = document.getElementById("m_notice");
 
 // colors:
 let c_ready = "green";
@@ -202,11 +203,13 @@ document.addEventListener("touchend", e => {
         switch (moveDir) {
             case "right":
                 nextScramble();
+                mobile_notice("Next Scramble");
                 break;
 
             case "left":
                 current_round.reset();
                 timer_block.textContent = "0.00";
+                mobile_notice("Reset");
                 break;
 
             case "up":
@@ -214,12 +217,15 @@ document.addEventListener("touchend", e => {
                 switch (input_theme.toUpperCase()) {
                     case "P":
                         changeTheme("pink");
+                        mobile_notice("Theme: Pink");
                         break;
                     case "B":
                         changeTheme("blue");
+                        mobile_notice("Theme: Blue");
                         break;
                     case "D":
                         changeTheme("default");
+                        mobile_notice("Theme: Dark");
                         break;
                     default:
                         break;
@@ -231,6 +237,8 @@ document.addEventListener("touchend", e => {
                 if (input_goal && input_goal > 0 && !isNaN(Number(input_goal))) {
                     goal = Number(input_goal);
                     changeStorage("goal", goal);
+                    let tmp = new Result(goal);
+                    mobile_notice(`Goal: ${tmp.displayTime()}`);
                 }
                 break;
             default:
@@ -238,6 +246,13 @@ document.addEventListener("touchend", e => {
         cancelStart();
     }
 });
+
+function mobile_notice(msg) {
+    m_notice_block.textContent = msg;
+    setTimeout(() => {
+        m_notice_block.textContent = "";
+    }, 800);
+}
 
 scramble_block.textContent = scramble;
 
