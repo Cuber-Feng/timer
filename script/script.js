@@ -123,29 +123,118 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-document.addEventListener("touchstart", (e) => {
+// --------- Screen ------------
+let startTouches = [];
+let t_startTime = 0;
+let isMove = false;
+let longPressTimer = null;
+let moveDir = null;
+
+document.addEventListener("touchstart", e => {
+    startTouches = [...e.touches].map(t => ({ id: t.identifier, x: t.clientX, y: t.clientY }));
+    t_startTime = Date.now();
+    isMove = false;
     if (running) {
         stopTimer();
     } else {
         if (locked) {
             return;
         } else if (!running) {
-            timer_block.style.color = c_ready;
-            isReady = true;
-            hideElements();
+            timer_block.style.color = "red";
+            longPressTimer = setTimeout(() => {
+                if (!isMove) {
+                    timer_block.style.color = c_ready;
+                    isReady = true;
+                    hideElements();
+                }
+            }, 300);
         }
-
     }
 });
 
-document.addEventListener("touchend", (e) => {
-    if (!running && isReady) {
-        startTimer();
+document.addEventListener("touchmove", e => {
+    if (e.touches.length === 0) return;
+
+    const currentTouches = [...e.touches];
+
+    for (let i = 0; i < currentTouches.length; i++) {
+        let s = startTouches[i];
+        let c = currentTouches[i];
+        const dx = c.clientX - s.x;
+        const dy = c.clientY - s.y;
+        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+            isMove = true;
+            if (Math.abs(dx) - Math.abs(dy) > 0) {
+                if (dx > 0) {
+                    moveDir = "right";
+                } else {
+                    moveDir = "left";
+                }
+            } else {
+                if (dy > 0) {
+                    moveDir = "down";
+                } else {
+                    moveDir = "up";
+                }
+            }
+        }
     }
 });
 
-document.addEventListener("touchmove", (e) => {
-    console.log("触摸移动", e.touches);
+document.addEventListener("touchend", e => {
+    const t_endTime = Date.now();
+    const duration = t_endTime - t_startTime;
+    const fingers = startTouches.length;
+
+    if (duration < 300) {
+        clearTimeout(longPressTimer);
+        timer_block.style.color = c_normal;
+    }
+
+    // 如果是点击：1. 未移动 2. 时间短
+    if (!isMove && fingers === 1) {
+        if (!running && isReady) {
+            startTimer();
+        }
+        return;
+    }
+    if (isMove) {
+        switch (moveDir) {
+            case "right":
+                nextScramble();
+                break;
+
+            case "left":
+                break;
+
+            case "up":
+                const input_theme = prompt(`Change your theme to \nP: pink, B: blue, D: dark`) || "no input";
+                switch (input_theme.toUpperCase()) {
+                    case "P":
+                        changeTheme("pink");
+                        break;
+                    case "B":
+                        changeTheme("blue");
+                        break;
+                    case "D":
+                        changeTheme("default");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case "down":
+                const input_goal = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
+                if (input_goal && input_goal > 0 && !isNaN(Number(input_goal))) {
+                    goal = Number(input_goal);
+                    changeStorage("goal", goal);
+                }
+                break;
+            default:
+        }
+        cancelStart();
+    }
 });
 
 scramble_block.textContent = scramble;
@@ -168,6 +257,13 @@ function startTimer() {
     startTime = performance.now();
     intervalId = setInterval(updateTimer, 10);
     running = true;
+}
+
+function cancelStart() {
+    timer_block.style.color = c_normal;
+    running = false;
+    isReady = false;
+    showElements();
 }
 
 function nextScramble() {

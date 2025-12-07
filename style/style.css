@@ -1,3 +1,10 @@
+* {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+
 body {
     background: #222;
     color: #fff;
