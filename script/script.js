@@ -200,48 +200,50 @@ document.addEventListener("touchend", e => {
         return;
     }
     if (isMove) {
-        switch (moveDir) {
-            case "right":
-                nextScramble();
-                mobile_notice("Next Scramble");
-                break;
+        if (!locked) {
+            switch (moveDir) {
+                case "right":
+                    nextScramble();
+                    mobile_notice("Next Scramble");
+                    break;
 
-            case "left":
-                current_round.reset();
-                timer_block.textContent = "0.00";
-                mobile_notice("Reset");
-                break;
+                case "left":
+                    current_round.reset();
+                    timer_block.textContent = "0.00";
+                    mobile_notice("Reset");
+                    break;
 
-            case "up":
-                const input_theme = prompt(`Change your theme to \nP: pink, B: blue, D: dark`) || "no input";
-                switch (input_theme.toUpperCase()) {
-                    case "P":
-                        changeTheme("pink");
-                        mobile_notice("Theme: Pink");
-                        break;
-                    case "B":
-                        changeTheme("blue");
-                        mobile_notice("Theme: Blue");
-                        break;
-                    case "D":
-                        changeTheme("default");
-                        mobile_notice("Theme: Dark");
-                        break;
-                    default:
-                        break;
-                }
-                break;
+                case "up":
+                    const input_theme = prompt(`Change your theme to \nP: pink, B: blue, D: dark`) || "no input";
+                    switch (input_theme.toUpperCase()) {
+                        case "P":
+                            changeTheme("pink");
+                            mobile_notice("Theme: Pink");
+                            break;
+                        case "B":
+                            changeTheme("blue");
+                            mobile_notice("Theme: Blue");
+                            break;
+                        case "D":
+                            changeTheme("default");
+                            mobile_notice("Theme: Dark");
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
 
-            case "down":
-                const input_goal = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
-                if (input_goal && input_goal > 0 && !isNaN(Number(input_goal))) {
-                    goal = Number(input_goal);
-                    changeStorage("goal", goal);
-                    let tmp = new Result(goal);
-                    mobile_notice(`Goal: ${tmp.displayTime()}`);
-                }
-                break;
-            default:
+                case "down":
+                    const input_goal = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
+                    if (input_goal && input_goal > 0 && !isNaN(Number(input_goal))) {
+                        goal = Number(input_goal);
+                        changeStorage("goal", goal);
+                        let tmp = new Result(goal);
+                        mobile_notice(`Goal: ${tmp.displayTime()}`);
+                    }
+                    break;
+                default:
+            }
         }
         cancelStart();
     }
