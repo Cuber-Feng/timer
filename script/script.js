@@ -205,6 +205,8 @@ document.addEventListener("touchend", e => {
                 break;
 
             case "left":
+                current_round.reset();
+                timer_block.textContent = "0.00";
                 break;
 
             case "up":
