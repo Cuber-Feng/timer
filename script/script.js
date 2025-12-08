@@ -192,12 +192,11 @@ document.addEventListener("touchend", e => {
         timer_block.style.color = c_normal;
     }
 
-    // 如果是点击：1. 未移动 2. 时间短
-    if (!isMove && fingers === 1) {
+    if (fingers == 1) {
         if (!running && isReady) {
             startTimer();
+            return;
         }
-        return;
     }
     if (isMove) {
         if (!locked) {
