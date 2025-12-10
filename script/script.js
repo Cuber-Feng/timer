@@ -166,7 +166,7 @@ document.addEventListener("touchmove", e => {
         let c = currentTouches[i];
         const dx = c.clientX - s.x;
         const dy = c.clientY - s.y;
-        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        if (Math.abs(dx) > 100 || Math.abs(dy) > 100) {
             isMove = true;
             if (Math.abs(dx) - Math.abs(dy) > 0) {
                 if (dx > 0) {
