@@ -216,7 +216,7 @@ document.addEventListener("touchend", e => {
                     break;
 
                 case "up":
-                    const input_theme = prompt(`Change your theme to \nP: pink, B: blue, D: dark`) || "no input";
+                    const input_theme = prompt(`Change your theme to \nP: pink, B: blue, D: dark, Y: yellow`) || "no input";
                     switch (input_theme.toUpperCase()) {
                         case "P":
                             changeTheme("pink");
@@ -229,6 +229,10 @@ document.addEventListener("touchend", e => {
                         case "D":
                             changeTheme("default");
                             mobile_notice("Theme: Dark");
+                            break;
+                        case "Y":
+                            changeTheme("yellow");
+                            mobile_notice("Theme: Banana");
                             break;
                         default:
                             break;
