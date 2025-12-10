@@ -236,6 +236,7 @@ document.addEventListener("touchend", e => {
                     const input_goal = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
                     if (input_goal && input_goal > 0 && !isNaN(Number(input_goal))) {
                         goal = Number(input_goal);
+                        current_round.changeGoal(goal);
                         changeStorage("goal", goal);
                         let tmp = new Result(goal);
                         mobile_notice(`Goal: ${tmp.displayTime()}`);
@@ -394,6 +395,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (m) {
         changeMode(m);
     }
+
+    current_round.changeGoal(goal);
 });
 
 function isMobile() {

@@ -205,11 +205,11 @@ class Round {
                 return str1 + ", " + str2;
                 break;
             case 2:
-                tmp = new Result(this.goal * 3 - this.sorted_round[0].t - this.sorted_round[1].t)
+                tmp = new Result(this.goal * 3 - this.sorted_round[0].t - this.sorted_round[1].t);
                 return tmp.displayTime();
                 break;
             case 1:
-                tmp = new Result(this.goal * 2 - this.sorted_round[0].t)
+                tmp = new Result(this.goal * 2 - this.sorted_round[0].t);
                 return tmp.displayTime();
                 break;
             case 0:
@@ -233,5 +233,6 @@ class Round {
 
     changeGoal(g) {
         this.goal = g;
+        this.printTable();
     }
 }
