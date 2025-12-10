@@ -16,6 +16,7 @@ body {
 }
 
 #timer {
+    text-align: center;
     font-size: 6.4rem;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
@@ -143,6 +144,13 @@ body {
     #target::before {
         content: "-------------\ATarget:";
         white-space: pre;
+    }
+
+}
+
+@media (max-height: 450px) {
+    #timer {
+        font-size: 15vh;
     }
 
 }

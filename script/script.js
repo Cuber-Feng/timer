@@ -8,7 +8,6 @@ let sorted_result = [];
 let locked = false;
 let goal = 10;
 let mode = "ao5"; // or "mo3"
-// let current_result = -1
 
 let timer_block = document.getElementById("timer");
 let scramble_block = document.getElementById("scramble");
@@ -91,6 +90,7 @@ document.addEventListener("keydown", (e) => {
             const input = prompt(`Change your goal from ${goal.toFixed(2)} to:`);
             if (input && input > 0 && !isNaN(Number(input))) {
                 goal = Number(input);
+                current_round.changeGoal(goal);
                 changeStorage("goal", goal);
             }
         }

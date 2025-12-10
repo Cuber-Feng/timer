@@ -52,14 +52,14 @@ class Round {
         this.m_length = n;
         this.round = [];
         this.sorted_round = [];
-        this.target = null;
+        this.target = g;
         this.avg = null;
         this.best = null;
         this.goal = g;
     }
 
     getBest() {
-        if (this.round.length == 0){
+        if (this.round.length == 0) {
             return "";
         }
         let best = new Result(this.sorted_round[0].t);
@@ -96,6 +96,13 @@ class Round {
             this.round.push(tmp);
             this.sorted_round = this.round.slice().sort((a, b) => a.compareTo(b));
             this.addBrackets();
+            if (this.round.length == this.m_length) {
+                if (this.goal >= this.getAverage()) {
+                    document.getElementById("timer").textContent += "\nSuccess";
+                } else {
+                    document.getElementById("timer").textContent += "\nFail";
+                }
+            }
             this.printTable();
         } else {
             this.reset();
@@ -165,26 +172,66 @@ class Round {
         if (this.m_length != 5) {
             return "";
         }
-        if (this.round.length < 4 || this.round.length == 5) {
-            return ""
-        } else {
-            if (this.getWPA() != "DNF" && Number(this.getWPA()) <= goal) {
-                return "Guaranteed!";
-            } else if (this.getBPA() == "DNF" || Number(this.getBPA()) > goal) {
-                return "Impossible!";
-            } else {
-                let tmp = new Result(this.goal * 3 - this.sorted_round[1].t - this.sorted_round[2].t)
+        let tmp;
+        switch (this.round.length) {
+            case 4:
+                if (this.getWPA() != "DNF" && Number(this.getWPA()) <= this.goal) {
+                    return "Guaranteed!";
+                } else if (this.getBPA() == "DNF" || Number(this.getBPA()) > this.goal) {
+                    return "Impossible!";
+                } else {
+                    tmp = new Result(this.goal * 3 - this.sorted_round[1].t - this.sorted_round[2].t)
+                    return tmp.displayTime();
+                }
+                break;
+            case 3:
+                let tmp1, tmp2, str1, str2;
+            
+                // can achive the goal by the 4th try
+                tmp1 = new Result(this.goal * 3 - this.sorted_round[1].t - this.sorted_round[2].t)
+                if (tmp1.t < this.sorted_round[0].t) {
+                    str1 = "Impossible";
+                } else {
+                    str1 = tmp1.displayTime();
+                }
+
+                // the final try still have the chance
+                if (this.sorted_round[0].t + this.sorted_round[1].t + this.sorted_round[2].t <= this.goal * 3) {
+                    str2 = "Guaranteed";
+                } else {
+                    tmp2 = new Result(this.goal * 3 - this.sorted_round[0].t - this.sorted_round[1].t);
+                    str2 = tmp2.displayTime();
+                }
+                return str1 + ", " + str2;
+                break;
+            case 2:
+                tmp = new Result(this.goal * 3 - this.sorted_round[0].t - this.sorted_round[1].t)
                 return tmp.displayTime();
-            }
+                break;
+            case 1:
+                tmp = new Result(this.goal * 2 - this.sorted_round[0].t)
+                return tmp.displayTime();
+                break;
+            case 0:
+            case 5:
+                tmp = new Result(this.goal)
+                return tmp.displayTime();
+                break;
+            default:
+                return ""
         }
     }
 
     reset() {
         this.round = [];
         this.sorted_round = [];
-        this.target = null;
+        this.target = this.getTarget();
         this.avg = null;
         this.best = null;
         this.printTable();
+    }
+
+    changeGoal(g) {
+        this.goal = g;
     }
 }
