@@ -1,0 +1,28 @@
+#scrambleImg td {
+    border: solid 1px;
+}
+
+#scrambleImg #ph {
+    border: 0;
+}
+
+#scrambleImg td {
+    width: 20px;
+    height: 20px;
+}
+
+#scrambleImg #s1 {
+    width: 400px;
+}
+
+#scrambleImg {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+@media (max-width: 950px) {
+    #scrambleImg {
+        display: none;
+    }
+}

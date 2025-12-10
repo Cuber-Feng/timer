@@ -1,8 +1,42 @@
+const edges = [
+    new Edge([1, 0, 2], 0, ["white", "green"]),
+    new Edge([0, 1, 2], 0, ["white", "orange"]),
+    new Edge([2, 1, 2], 0, ["white", "red"]),
+    new Edge([1, 2, 2], 0, ["white", "blue"]),
+
+    new Edge([0, 0, 1], 0, ["green", "orange"]),
+    new Edge([0, 2, 1], 0, ["blue", "orange"]),
+    new Edge([2, 2, 1], 0, ["blue", "red"]),
+    new Edge([2, 0, 1], 0, ["green", "red"]),
+
+    new Edge([1, 0, 0], 0, ["yellow", "green"]),
+    new Edge([0, 1, 0], 0, ["yellow", "orange"]),
+    new Edge([2, 1, 0], 0, ["yellow", "red"]),
+    new Edge([1, 2, 0], 0, ["yellow", "blue"])
+];
+
+const corners = [
+    new Corner([0, 0, 2], 0, ["white", "green", "orange"]),
+    new Corner([0, 2, 2], 0, ["white", "orange", "blue"]),
+    new Corner([2, 2, 2], 0, ["white", "blue", "red"]),
+    new Corner([2, 0, 2], 0, ["white", "red", "green"]),
+
+    new Corner([0, 0, 0], 0, ["yellow", "orange", "green"]),
+    new Corner([0, 2, 0], 0, ["yellow", "blue", "orange"]),
+    new Corner([2, 2, 0], 0, ["yellow", "red", "blue"]),
+    new Corner([2, 0, 0], 0, ["yellow", "green", "red"]),
+];
+
+let cube = new Cube3x3(edges, corners);
+cube.print();
+let scramble = genScramble();
+cube.reset();
+cube.turn(scramble);
+
 let startTime = null;
 let running = false;
 let intervalId = null;
 let isReady = false;
-let scramble = genScramble();
 let results = [];
 let sorted_result = [];
 let locked = false;
@@ -271,6 +305,8 @@ function stopTimer() {
     isReady = false;
     showElements();
     scramble_block.textContent = genScramble();
+    cube.reset();
+    cube.turn(scramble_block.textContent);
     current_round.addResult(current_result);
     locked = true;
     setTimeout(() => {
@@ -294,16 +330,21 @@ function cancelStart() {
 
 function nextScramble() {
     scramble_block.textContent = genScramble();
+    cube.reset();
+    cube.turn(scramble_block.textContent);
 }
 
 function hideElements() {
     scramble_block.style.display = "none";
     table_block.style.display = "none";
+    document.getElementById("scrambleImg").style.display = "none";
 }
 
 function showElements() {
     scramble_block.style.display = "block";
     table_block.style.display = "block";
+    if (document.documentElement.clientWidth >= 950)
+        document.getElementById("scrambleImg").style.display = "block";
 }
 
 function switchDNF() {
@@ -404,6 +445,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     current_round.changeGoal(goal);
+
+
 });
 
 function isMobile() {

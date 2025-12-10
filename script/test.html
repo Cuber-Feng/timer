@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #b4b2b2;
+        }
+
+        td {
+            border: solid 1px;
+        }
+
+        #ph {
+            border: 0;
+        }
+
+        td {
+            width: 20px;
+            height: 20px;
+        }
+
+        #s1 {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" name="scramble" id="s1">
+    <button onclick="drawScramble()">submit</button>
+    <button onclick="reset()">reset</button>
+    <table>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="u6">&nbsp;</td>
+            <td id="u7">&nbsp;</td>
+            <td id="u8">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="u3">&nbsp;</td>
+            <td id="u4" style="background-color: white;">&nbsp;</td>
+            <td id="u5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="u0">&nbsp;</td>
+            <td id="u1">&nbsp;</td>
+            <td id="u2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td id="l8">&nbsp;</td>
+            <td id="l7">&nbsp;</td>
+            <td id="l6">&nbsp;</td>
+
+            <td id="f6">&nbsp;</td>
+            <td id="f7">&nbsp;</td>
+            <td id="f8">&nbsp;</td>
+
+            <td id="r6">&nbsp;</td>
+            <td id="r7">&nbsp;</td>
+            <td id="r8">&nbsp;</td>
+
+            <td id="b8">&nbsp;</td>
+            <td id="b7">&nbsp;</td>
+            <td id="b6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td id="l5">&nbsp;</td>
+            <td id="l4" style="background-color: orange;">&nbsp;</td>
+            <td id="l3">&nbsp;</td>
+
+            <td id="f3">&nbsp;</td>
+            <td id="f4" style="background-color: green;">&nbsp;</td>
+            <td id="f5">&nbsp;</td>
+
+            <td id="r3">&nbsp;</td>
+            <td id="r4" style="background-color: red;">&nbsp;</td>
+            <td id="r5">&nbsp;</td>
+
+            <td id="b5">&nbsp;</td>
+            <td id="b4" style="background-color: blue;">&nbsp;</td>
+            <td id="b3">&nbsp;</td>
+        </tr>
+        <tr>
+            <td id="l2">&nbsp;</td>
+            <td id="l1">&nbsp;</td>
+            <td id="l0">&nbsp;</td>
+
+            <td id="f0">&nbsp;</td>
+            <td id="f1">&nbsp;</td>
+            <td id="f2">&nbsp;</td>
+
+            <td id="r0">&nbsp;</td>
+            <td id="r1">&nbsp;</td>
+            <td id="r2">&nbsp;</td>
+
+            <td id="b2">&nbsp;</td>
+            <td id="b1">&nbsp;</td>
+            <td id="b0">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="d0">&nbsp;</td>
+            <td id="d1">&nbsp;</td>
+            <td id="d2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="d3">&nbsp;</td>
+            <td id="d4" style="background-color: yellow;">&nbsp;</td>
+            <td id="d5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="ph">&nbsp;</td>
+            <td id="d6">&nbsp;</td>
+            <td id="d7">&nbsp;</td>
+            <td id="d8">&nbsp;</td>
+        </tr>
+    </table>
+    <script src="./twisty.js"></script>
+</body>
+
+</html>
