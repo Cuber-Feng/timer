@@ -14,6 +14,11 @@
             "background": "#BBDCE5",
             "normal": "#0d3046",
             "ready": "darkgreen"
+        },
+        "yellow": {
+            "background": "#FFEE91",
+            "normal": "#74512D",
+            "ready": "darkgreen"
         }
     }
 }

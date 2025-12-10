@@ -69,7 +69,7 @@ document.addEventListener("keydown", (e) => {
         }
 
         if (e.code == "KeyT") {
-            notice_block.textContent = "Select Theme: P - Pink, D - Dark, B - Blue";
+            notice_block.textContent = "Select Theme: P - Pink, D - Dark, B - Blue, Y - Yellow";
         }
         else if (lastKey == "KeyT") {
             if (e.code == "KeyP") {
@@ -80,6 +80,9 @@ document.addEventListener("keydown", (e) => {
                 notice_block.textContent = "";
             } else if (e.code == "KeyB") {
                 changeTheme("blue");
+                notice_block.textContent = "";
+            } else if (e.code == "KeyY") {
+                changeTheme("yellow");
                 notice_block.textContent = "";
             } else {
                 notice_block.textContent = "";
