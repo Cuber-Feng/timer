@@ -39,8 +39,7 @@ body {
 #results {
     position: absolute;
     bottom: 10%;
-    left: 50%;
-    transform: translate(-50%, 0);
+    left: 1rem;
 }
 
 #results th,
@@ -64,7 +63,7 @@ body {
     display: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1050px) {
     #timer {
         font-size: 4rem;
         top: 43%;
@@ -89,41 +88,34 @@ body {
     }
 
     #results {
+        display: block;
         position: absolute;
-        bottom: 1rem;
-        left: 2rem;
-        transform: translate(0, 0);
+        bottom: 0rem;
+        left: 1rem;
+        margin: 0;
+        max-width: 50vw;
     }
 
-    table,
-    th,
-    td,
-    tr {
+    #results td,
+    #results tr {
         display: block;
     }
 
-    tr {
+    #results tr {
         margin-bottom: 1em;
     }
 
-    #results th,
     #results td {
         min-width: 3rem;
         text-align: left;
-        padding: 0 0.5rem;
+        padding: 0;
     }
 
-    td {
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    th {
+    #results th {
         display: none;
     }
 
-    td::before {
+    #results td::before {
         content: attr(data-label);
         /* 用 data-label 显示列名 */
     }
@@ -135,12 +127,6 @@ body {
         font-weight: 600;
     }
 
-    /* 
-    #target::before {
-        content: "-----";
-        display: block;
-    } 
-*/
     #target::before {
         content: "-------------\ATarget:";
         white-space: pre;

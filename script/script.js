@@ -343,7 +343,7 @@ function hideElements() {
 function showElements() {
     scramble_block.style.display = "block";
     table_block.style.display = "block";
-    if (document.documentElement.clientWidth >= 950)
+    if (document.documentElement.clientWidth >= 300)
         document.getElementById("scrambleImg").style.display = "block";
 }
 
