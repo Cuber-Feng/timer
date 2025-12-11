@@ -68,6 +68,11 @@ class Round {
     getAverage() {
         let avg;
         if (this.m_length == 5) {
+            if (this.round.length == 4) {
+                let str1 = this.getBPA();
+                let str2 = this.getWPA();
+                return str1.toFixed(2) + " ~ " + str2.toFixed(2);
+            }
             if (this.round.length < 5) {
                 return "";
             }
@@ -186,7 +191,7 @@ class Round {
                 break;
             case 3:
                 let tmp1, tmp2, str1, str2;
-            
+
                 // can achive the goal by the 4th try
                 tmp1 = new Result(this.goal * 3 - this.sorted_round[1].t - this.sorted_round[2].t)
                 if (tmp1.t < this.sorted_round[0].t) {
