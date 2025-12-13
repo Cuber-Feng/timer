@@ -107,6 +107,7 @@ class Round {
                 } else {
                     document.getElementById("timer").textContent += "\nFail";
                 }
+                this.saveRound();
             }
             this.printTable();
         } else {
@@ -140,6 +141,7 @@ class Round {
         document.getElementById("target").textContent = "";
         document.getElementById("average").textContent = "";
         document.getElementById("best").textContent = "";
+        document.getElementById("rate").textContent = "";
         for (let i = 0; i < this.m_length; i++) {
             document.getElementById("att" + String(i + 1)).textContent = "";
         }
@@ -149,6 +151,7 @@ class Round {
         document.getElementById("target").textContent = this.getTarget();
         document.getElementById("average").textContent = this.getAverage();
         document.getElementById("best").textContent = this.getBest();
+        document.getElementById("rate").textContent = twoDecimal(this.printStatus()) + "%";
     }
 
     getWPA() {
@@ -240,4 +243,82 @@ class Round {
         this.goal = g;
         this.printTable();
     }
+
+    saveRound() {
+        if (this.round.length == this.m_length) {
+            let records = JSON.parse(localStorage.getItem("records")) || [];
+            let times = [];
+            this.round.forEach(r => {
+                times.push(twoDecimal(r.t + (r.isPlusTwo ? 2 : 0)));
+            });
+            records.push({
+                attempts: times.slice(),
+                average: this.getAverage(),
+                best: this.getBest(),
+                goal: this.goal
+            });
+            localStorage.setItem("records", JSON.stringify(records));
+        }
+    }
+
+    clearRecords() {
+        localStorage.removeItem("records");
+    }
+
+    printStatus() {
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+        let g = this.goal;
+        let countSuccess = 0;
+        records.forEach(rec => {
+            if (g >= rec.average) {
+                countSuccess += 1;
+            }
+        });
+        console.log("Goal: " + g.toFixed(2));
+        console.log(`Success / Total: ${countSuccess} / ${records.length}`);
+        let p = (records.length == 0 ? 0 : gaussianCDF(g, mean(records.map(r => Number(r.average))), std(records.map(r => Number(r.average)))) * 100);
+        console.log(`Estimated Success Rate (Gaussian Approximation): ${twoDecimal(p)}%`);
+        return p;
+    }
+
+    printRecords() {
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+        console.log("Detailed Records:");
+        let g = this.goal;
+        records.forEach((rec, index) => {
+            console.log(`Round ${index + 1} (${g >= rec.average ? "Success" : "Fail"}):`);
+            console.log("  Attempts: " + rec.attempts.join(", "));
+            console.log("  Average: " + rec.average + ", Best: " + rec.best);
+        });
+    }
+}
+
+function twoDecimal(num) {
+    return Math.floor(num * 100) / 100;
+}
+
+// Gaussian CDF approximation
+function gaussianCDF(x, mean, std) {
+    // Convert to standard normal
+    let z = (x - mean) / std;
+
+    // Abramowitz-Stegun approximation for CDF
+    let t = 1 / (1 + 0.2316419 * Math.abs(z));
+    let d = 0.3989423 * Math.exp(-z * z / 2);
+    let prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+
+    if (z > 0) {
+        prob = 1 - prob;
+    }
+    return prob;
+}
+
+
+function mean(arr) {
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+function std(arr) {
+    let m = mean(arr);
+    return Math.sqrt(arr.reduce((a, b) => a + (b - m) ** 2, 0) / arr.length);
 }

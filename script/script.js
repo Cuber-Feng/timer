@@ -247,6 +247,8 @@ document.addEventListener("touchend", e => {
                     current_round.reset();
                     timer_block.textContent = "0.00";
                     mobile_notice("Reset");
+                    current_round.clearRecords();
+                    current_round.printTable();
                     break;
 
                 case "up":
@@ -385,7 +387,11 @@ function changeTheme(t) {
 }
 
 function changeMode(m) {
+    if (m == mode) {
+        return;
+    }
     current_round.reset();
+    current_round.clearRecords();
     mode = m;
     if (m == "mo3") {
         current_round = new Round(3, goal);
@@ -404,6 +410,11 @@ function changeMode(m) {
         document.getElementById("target").style.display = "table-cell";
         document.getElementById("att4").style.display = "table-cell";
         document.getElementById("att5").style.display = "table-cell";
+    } else if (m == "ao5" && isMobile()) {
+        current_round = new Round(5, goal);
+        document.getElementById("target").style.display = "block";
+        document.getElementById("att4").style.display = "block";
+        document.getElementById("att5").style.display = "block";
     }
     changeStorage("mode", m);
 }
@@ -450,5 +461,5 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 function isMobile() {
-    return window.innerWidth <= 768; // 768px 以下通常认为是手机/平板
+    return window.innerWidth <= 1050; // 768px 以下通常认为是手机/平板
 }
